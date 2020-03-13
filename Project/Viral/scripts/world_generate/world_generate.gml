@@ -14,6 +14,8 @@ var maxd = mid_y - chnk;
 
 
 // Step 1: Populate
+show_debug_message("Step 1: Populate...");
+
 var count = 0;
 
 for (var i=0; i<room_width; i+=chnk)
@@ -54,6 +56,8 @@ for (var i=0; i<room_width; i+=chnk)
              
                     
 // Step 2: Connect Gaps
+show_debug_message("Step 2: Connect Gaps...");
+
 var rem = len*gap*2+len;
 
 for (var i=0; i<count; i++)
@@ -91,5 +95,23 @@ for (var i=0; i<count; i++)
             instance_create_depth(border[i,0].x+(px*(j+1)*ax),
             border[i,0].y+(py*(j+1)*ay), 7, obj_grass);   
 }
-    
-        
+
+
+// Step 3: Fill Water
+show_debug_message("Step 3: Fill Water...");
+
+var water_count = 0;
+
+for (var i=0; i<room_width; i+=len)
+    for (var j=0; j<room_height; j+=len)
+        if (place_free(i, j))
+            instance_create_depth(i, j, 8, obj_water);
+
+
+// Step 4: Smooth Corners
+show_debug_message("Step 4: Smooth Corners...");
+
+repeat(3)
+    instance_swap_all(obj_water, obj_grass, 1, len);
+
+show_debug_message("Done!");
