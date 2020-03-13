@@ -54,52 +54,42 @@ for (var i=0; i<room_width; i+=chnk)
              
                     
 // Step 2: Connect Gaps
-/*for (var n=0; n<instance_number(obj_grass); n++)
-{
-    show_debug_message("Checking "+string(n)+"/"+string(instance_number(obj_grass)))
-    var check = instance_find(obj_grass, n);
-    
-    if (!instance_place(check.x+len, check.y, obj_grass)
-    && instance_place(check.x+len*3, check.y, obj_grass))r
-        instance_create_depth(check.x+len, check.y, 8, obj_grass);
-}*/
 var rem = len*gap*2+len;
 
 for (var i=0; i<count; i++)
+{
     switch (border[i, 1])
     {
         case bor.left:
-            if (place_free(border[i,0].x-len, border[i,0].y)
-            && instance_position(border[i,0].x-rem, border[i,0].y, obj_grass))
-                for(var j=0; j<gap; j++)
-                    instance_create_depth
-                    (border[i,0].x-len*(j+1), border[i,0].y, 7, obj_grass);
+            var px = -len;          var py = 0;
+            var rx = -rem;          var ry = 0;
+            var ax = 1;             var ay = 0;
         break;
         
         case bor.right:
-            if (place_free(border[i,0].x+len, border[i,0].y)
-            && instance_position(border[i,0].x+rem, border[i,0].y, obj_grass))
-                for(var j=0; j<gap; j++)
-                    instance_create_depth
-                    (border[i,0].x+len*(j+1), border[i,0].y, 7, obj_grass);
+            var px = len;           var py = 0;
+            var rx = rem;           var ry = 0;
+            var ax = 1;             var ay = 0;
         break;
         
         case bor.up:
-            if (place_free(border[i,0].x, border[i,0].y-len)
-            && instance_position(border[i,0].x, border[i,0].y-rem, obj_grass))
-                for(var j=0; j<gap; j++)
-                    instance_create_depth
-                    (border[i,0].x, border[i,0].y-len*(j+1), 7, obj_grass);
+            var px = 0;             var py = -len;
+            var rx = 0;             var ry = -rem;
+            var ax = 0;             var ay = 1;
         break;
         
         case bor.down:
-            if (place_free(border[i,0].x, border[i,0].y+len)
-            && instance_position(border[i,0].x, border[i,0].y+rem, obj_grass))
-                for(var j=0; j<gap; j++)
-                    instance_create_depth
-                    (border[i,0].x, border[i,0].y+len*(j+1), 7, obj_grass);
+            var px = 0;             var py = len;
+            var rx = 0;             var ry = rem;
+            var ax = 0;             var ay = 1;
         break;
     }
     
+    if (place_free(border[i,0].x+px, border[i,0].y+py)
+    && instance_position(border[i,0].x+rx, border[i,0].y+ry, obj_grass))
+        for(var j=0; j<gap; j++)
+            instance_create_depth(border[i,0].x+(px*(j+1)*ax),
+            border[i,0].y+(py*(j+1)*ay), 7, obj_grass);   
+}
     
         
