@@ -1,10 +1,9 @@
-///world_generate(precision, tiles_per_chunk, tile_size)
+///world_generate(tiles_per_chunk, tile_size)
 
 enum bor { left, right, up, down };
 
-var prec = argument0;
-var tpc = argument1;
-var len = argument2;
+var tpc = argument0;
+var len = argument1;
 
 var mid_x = room_width / 2;
 var mid_y = room_height / 2;
@@ -112,6 +111,15 @@ for (var i=0; i<room_width; i+=len)
 show_debug_message("Step 4: Smooth Corners...");
 
 repeat(3)
-    instance_swap_all(obj_water, obj_grass, 1, len);
+    instance_swap_all(obj_water, obj_grass, false, 1, len);
 
+// Step 5: Border Randomness
+show_debug_message("Step 5: Border Randomness...");
+
+repeat(5)
+    instance_swap_all(obj_water, obj_grass, true, 1, len);
+    
+
+
+// Done!
 show_debug_message("Done!");
