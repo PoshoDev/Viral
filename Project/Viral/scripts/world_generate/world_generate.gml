@@ -95,10 +95,12 @@ for (var i=0; i<count; i++)
             border[i,0].y+(py*(j+1)*ay), 7, obj_grass);   
 }
 
-// Step ?: Horizontal Smoothing
+obj_grass.solid = true;
+
+// Step 3: Horizontal Smoothing
 show_debug_message("Step 3: Border Smoothing...");
 
-repeat(2)
+repeat(3)
 {
     for (var i=0; i<room_width; i+=len)
         for (var j=0; j<room_height; j+=len)
@@ -110,12 +112,42 @@ repeat(2)
                     
                     if (!place_free(cx, cy))
                     {
-                        instance_create_depth(i, j, -8, obj_water);
+                        instance_create_depth(i, j, -8, obj_grass);
                         break;
                     }
                 }
     
-    obj_water.solid = true;
+    obj_grass.solid = true;
+}
+
+
+// Step 4: Border Randomness
+show_debug_message("Step 4: Border Randomness...");
+
+var rep = tpc; // Play with this, maybe?
+var chance = 1;
+
+repeat(rep)
+{
+    for (var i=0; i<room_width; i+=len)
+        for (var j=0; j<room_height; j+=len)
+            if (place_free(i, j))
+                for (var k=0; k<360; k+=90)
+                {
+                    var cx = i + lengthdir_x(len, k);
+                    var cy = j + lengthdir_y(len, k);
+                    
+                    if (!place_free(cx, cy))
+                    {
+                        if (!irandom_range(0, chance))
+                            instance_create_depth(i, j, -8, obj_grass);
+                            
+                        break;
+                    }
+                }
+    
+    chance++;
+    obj_grass.solid = true;
 }
 
 
