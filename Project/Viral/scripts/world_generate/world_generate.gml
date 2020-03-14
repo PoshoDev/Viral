@@ -95,29 +95,51 @@ for (var i=0; i<count; i++)
             border[i,0].y+(py*(j+1)*ay), 7, obj_grass);   
 }
 
+// Step ?: Horizontal Smoothing
+show_debug_message("Step 3: Border Smoothing...");
 
-// Step 3: Fill Water
-show_debug_message("Step 3: Fill Water...");
+repeat(2)
+{
+    for (var i=0; i<room_width; i+=len)
+        for (var j=0; j<room_height; j+=len)
+            if (place_free(i, j))
+                for (var k=0; k<360; k+=90)
+                {
+                    var cx = i + lengthdir_x(len, k);
+                    var cy = j + lengthdir_y(len, k);
+                    
+                    if (!place_free(cx, cy))
+                    {
+                        instance_create_depth(i, j, -8, obj_water);
+                        break;
+                    }
+                }
+    
+    obj_water.solid = true;
+}
 
-var water_count = 0;
+
+
+// Step ?: Fill Water
+/*show_debug_message("Step 3: Fill Water...");
 
 for (var i=0; i<room_width; i+=len)
     for (var j=0; j<room_height; j+=len)
         if (place_free(i, j))
-            instance_create_depth(i, j, 8, obj_water);
+            instance_create_depth(i, j, 8, obj_water);*/
 
 
 // Step 4: Smooth Corners
-show_debug_message("Step 4: Smooth Corners...");
+/*show_debug_message("Step 4: Smooth Corners...");
 
 repeat(3)
-    instance_swap_all(obj_water, obj_grass, false, 1, len);
+    instance_swap_all(obj_water, obj_grass, false, 1, len);*/
 
 // Step 5: Border Randomness
-show_debug_message("Step 5: Border Randomness...");
+//show_debug_message("Step 5: Border Randomness...");
 
-repeat(5)
-    instance_swap_all(obj_water, obj_grass, true, 1, len);
+//repeat(1/*5*/)
+   // instance_swap_all(obj_water, obj_grass, true, 1, len);
     
 
 
