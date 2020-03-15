@@ -1,8 +1,8 @@
 {
-    "id": "8f8e62c0-1c57-5685-a264-7c71d011cf37",
+    "id": "f6a332df-8ad8-8c12-905a-9f2dd6a5342e",
     "modelName": "GMScript",
     "mvc": "1.0",
-    "name": "bcj",
+    "name": "raycast_vision",
     "IsCompatibility": false,
     "IsDnD": false
 }

@@ -226,7 +226,7 @@ repeat(8)
 // Step 8: Zombies
 show_debug_message("Step 8: Zombies...");
 
-repeat(64)
+//repeat(64)
 {
     with (all)
         solid = true;
