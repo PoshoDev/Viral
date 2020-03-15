@@ -1,2 +1,2 @@
 
-debug_draw_arrow(obj_building);
+debug_draw_arrow(obj_zombie);

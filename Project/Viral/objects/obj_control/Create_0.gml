@@ -1,4 +1,6 @@
 
+enum dir { left, right, up, down };
+
 global.len = 8;
 global.tpc = 16;
 

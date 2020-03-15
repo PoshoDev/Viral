@@ -219,7 +219,34 @@ repeat(8)
             instance_create_depth(tx, ty, 4, obj_building);
             done = true;
         }
+    }
+}
+
+
+// Step 8: Zombies
+show_debug_message("Step 8: Zombies...");
+
+repeat(64)
+{
+    with (all)
+        solid = true;
         
+    obj_grass.solid = false;
+    obj_sand.solid = false;
+    
+     var len_check = 8 * global.len;
+    var done = false;
+    
+    while(!done)
+    {
+        var tx = irandom_range(0, room_width/global.len) * global.len;
+        var ty = irandom_range(0, room_height/global.len) * global.len;
+        
+        if (place_free(tx, ty))
+        {
+            instance_create_depth(tx, ty, 4, obj_zombie);
+            done = true;
+        }
     }
 }
 
