@@ -92,15 +92,15 @@ for (var i=0; i<count; i++)
     && instance_position(border[i,0].x+rx, border[i,0].y+ry, obj_grass))
         for(var j=0; j<gap; j++)
             instance_create_depth(border[i,0].x+(px*(j+1)*ax),
-            border[i,0].y+(py*(j+1)*ay), 7, obj_grass);   
+            border[i,0].y+(py*(j+1)*ay), 8, obj_grass);   
 }
 
 obj_grass.solid = true;
 
-// Step 3: Horizontal Smoothing
+// Step 3: Border Smoothing
 show_debug_message("Step 3: Border Smoothing...");
 
-repeat(3)
+repeat(tpc/4)
 {
     for (var i=0; i<room_width; i+=len)
         for (var j=0; j<room_height; j+=len)
@@ -112,7 +112,7 @@ repeat(3)
                     
                     if (!place_free(cx, cy))
                     {
-                        instance_create_depth(i, j, -8, obj_grass);
+                        instance_create_depth(i, j, 8, obj_grass);
                         break;
                     }
                 }
@@ -124,7 +124,7 @@ repeat(3)
 // Step 4: Border Randomness
 show_debug_message("Step 4: Border Randomness...");
 
-var rep = tpc; // Play with this, maybe?
+var rep = tpc/4; // Play with this, maybe?
 var chance = 1;
 
 repeat(rep)
@@ -140,40 +140,95 @@ repeat(rep)
                     if (!place_free(cx, cy))
                     {
                         if (!irandom_range(0, chance))
-                            instance_create_depth(i, j, -8, obj_grass);
+                            instance_create_depth(i, j, 8, obj_grass);
                             
                         break;
                     }
                 }
     
-    chance++;
+    chance+=0.5;
     obj_grass.solid = true;
 }
 
 
+// Step 4: Beaches
+show_debug_message("Step 5: Beaches...");
 
-// Step ?: Fill Water
-/*show_debug_message("Step 3: Fill Water...");
+var rep = tpc; // Play with this, maybe?
+var chance = 0;
+
+repeat(rep)
+{
+    for (var i=0; i<room_width; i+=len)
+        for (var j=0; j<room_height; j+=len)
+            if (place_free(i, j))
+                for (var k=0; k<360; k+=90)
+                {
+                    var cx = i + lengthdir_x(len, k);
+                    var cy = j + lengthdir_y(len, k);
+                    
+                    if (!place_free(cx, cy))
+                    {
+                        if (!irandom_range(0, chance))
+                            instance_create_depth(i, j, 8, obj_sand);
+                            
+                        break;
+                    }
+                }
+    
+    obj_sand.solid = true;
+    chance += 0.25;
+}
+
+
+// Step 6: Fill Water
+show_debug_message("Step 6: Fill Water...");
 
 for (var i=0; i<room_width; i+=len)
-    for (var j=0; j<room_height; j+=len)
-        if (place_free(i, j))
-            instance_create_depth(i, j, 8, obj_water);*/
+        for (var j=0; j<room_height; j+=len)
+            if (place_free(i, j))
+                instance_create_depth(i, j, 8, obj_water);
 
 
-// Step 4: Smooth Corners
-/*show_debug_message("Step 4: Smooth Corners...");
+// Step 7: Houses
+show_debug_message("Step 7: Houses...");
 
-repeat(3)
-    instance_swap_all(obj_water, obj_grass, false, 1, len);*/
-
-// Step 5: Border Randomness
-//show_debug_message("Step 5: Border Randomness...");
-
-//repeat(1/*5*/)
-   // instance_swap_all(obj_water, obj_grass, true, 1, len);
+repeat(8)
+{
+    with (all)
+        solid = true;
+        
+    obj_grass.solid = false;
+    obj_sand.solid = false;
     
+    var len_check = 8 * global.len;
+    var done = false;
+    
+    while(!done)
+    {
+        var tx = irandom_range(0, room_width/global.len) * global.len;
+        var ty = irandom_range(0, room_height/global.len) * global.len;
+        
+        var c0 = place_free(tx, ty);
+        var c1 = place_free(tx+len_check, ty);
+        var c2 = place_free(tx, ty+len_check);
+        var c3 = place_free(tx+len_check, ty+len_check);
+        
+        if (c0 && c1 && c2 && c3)
+        {
+            instance_create_depth(tx, ty, 4, obj_building);
+            done = true;
+        }
+        
+    }
+}
 
 
 // Done!
+
+obj_grass.solid = false;
+obj_sand.solid =  false;
+obj_water.solid = false;
+obj_floor.solid = false;
+
 show_debug_message("Done!");
